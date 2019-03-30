@@ -3,7 +3,7 @@ import App from './App';
 
 const Form = (props) => {
     return (
-        <form>
+        <form onSubmit={props.submit}>
             <input 
             type="text" 
             value={props.value} 
