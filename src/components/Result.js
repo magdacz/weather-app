@@ -1,8 +1,12 @@
 import React from 'react';
 
-const Result = () => {
+const Result = (props) => {
+    const {err, city, temp, sunrise, sunset, wind, pressure} = props.weather;
     return (
-    <div>Result</div>
+    <div>
+        <div>Pogoda dla: {city}</div>
+        <div>Temperatura: {temp}</div>
+    </div>
     )
 }
 

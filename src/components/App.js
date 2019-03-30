@@ -3,6 +3,8 @@ import './App.css';
 import Form from './Form';
 import Result from './Result'
 
+const APIKey = '06abe5d50605bc8894268129e3bff6c0';
+
 class App extends Component {
     
     state = {
@@ -14,13 +16,13 @@ class App extends Component {
         temp: '',
         pressure: '',
         wind: '',
-        err: '',
+        err: false,
     }
 
 handleCitySubmit = (e) => {
    e.preventDefault(); 
    
-    const API = `http://api.openweathermap.org/data/2.5/weather?q=${this.state.value}&appid=06abe5d50605bc8894268129e3bff6c0`;
+    const API = `http://api.openweathermap.org/data/2.5/weather?q=${this.state.value}&appid=${APIKey}&units=metric`;
     
     fetch(API)
         .then(response => {
@@ -30,8 +32,27 @@ handleCitySubmit = (e) => {
         throw Error("błąd")
         })
         .then(response => response.json())
-        .then(data => console.log(data))
-        .catch(err => console.log(err))
+        .then(data => {
+            console.log(data)
+            const time = new Date().toLocaleString();
+            this.setState(prevState => ({
+                date: time ,
+                city: this.state.value,
+                sunrise: data.sys.sunrise,
+                sunset: data.sys.sunset,
+                temp: data.main.temp,
+                pressure: data.main.pressure,
+                wind: data.wind.speed,
+                err: false,
+            }))
+        })
+        .catch(err => {
+            console.log(err)
+            this.setState(prevState => ({
+                err: true,
+                city: this.state.value
+            }))
+        })
 }
 
 handleInputChange = (e) => {
@@ -49,7 +70,7 @@ handleInputChange = (e) => {
         change={this.handleInputChange}
         submit={this.handleCitySubmit}
         />
-        <Result />
+        <Result weather={this.state}/>
       </div>
     );
   }
