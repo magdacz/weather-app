@@ -1,0 +1,27 @@
+.result {
+    width: 400px;
+    text-align: center;
+    margin: auto;
+    color: #fff;
+}
+
+h1 {
+   position: relative;
+   margin-top: 30px;
+}
+
+h1::before {
+    content: "";
+    display: block;
+    position: absolute;
+    width: 80%;
+    height: 2px;
+    background: #4E77A5;
+    top: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+h2 {
+    font-size: 32px;
+}

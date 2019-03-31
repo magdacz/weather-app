@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import './App.css';
 import Form from './Form';
-import Result from './Result'
+import Result from './Result';
 
 const APIKey = '06abe5d50605bc8894268129e3bff6c0';
 
@@ -19,10 +19,19 @@ class App extends Component {
         err: false,
     }
 
-handleCitySubmit = (e) => {
-   e.preventDefault(); 
-   
-    const API = `http://api.openweathermap.org/data/2.5/weather?q=${this.state.value}&appid=${APIKey}&units=metric`;
+
+
+handleInputChange = (e) => {
+    
+    this.setState({
+        value: e.target.value, 
+    })
+}
+
+componentDidUpdate(prevProps, prevState) {
+    if(this.state.value === 0) return
+    if(prevState.value !==this.state.value) {
+           const API = `http://api.openweathermap.org/data/2.5/weather?q=${this.state.value}&appid=${APIKey}&units=metric`;
     
     fetch(API)
         .then(response => {
@@ -36,8 +45,8 @@ handleCitySubmit = (e) => {
             console.log(data)
             const time = new Date().toLocaleString();
             this.setState(prevState => ({
-                date: time ,
-                city: this.state.value,
+                date: time,
+                city: this.state.value.toUpperCase(),
                 sunrise: data.sys.sunrise,
                 sunset: data.sys.sunset,
                 temp: data.main.temp,
@@ -50,21 +59,15 @@ handleCitySubmit = (e) => {
             console.log(err)
             this.setState(prevState => ({
                 err: true,
-                city: this.state.value
+                city: prevState.value
             }))
         })
-}
-
-handleInputChange = (e) => {
-    
-    this.setState({
-        value: e.target.value, 
-    })
+    }
 }
     
   render() {
     return (
-      <div>
+      <div className='app'>
         <Form 
         value={this.state.value} 
         change={this.handleInputChange}
